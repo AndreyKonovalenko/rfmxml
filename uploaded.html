@@ -13,8 +13,8 @@
 
 <body>
 
-  <form action="/uploaded/data" method="post">
-    <input type="text" placeholder="Enter a Treehouse username" id="username" name="username">
+  <form action="/uploaded/data" enctype="multipart/form-data" method="post">
+    <input type="file" placeholder="Enter a Treehouse username" id="username" name="file_name">
     <input type="submit" value="submit" class="button">
   </form>
 

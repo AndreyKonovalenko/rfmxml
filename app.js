@@ -1,6 +1,7 @@
 var express =   require("express");
 var multer  =   require('multer');
 var querystring = require("querystring");
+var fs = require("fs");
 var app  =   express();
 var util = require('util');
 
@@ -9,25 +10,65 @@ var storage =   multer.diskStorage({
     callback(null, './uploads');
   },
   filename: function (req, file, callback) {
-    callback(null, file.fieldname + '-' + Date.now() + ".xml");
+    callback(null, data_object.file_name);
   }
 });
-var upload = multer({ storage : storage}).single('file_location');
+
+
+var data_object = {};
+//post into single method file name from form
+var upload = multer({ storage : storage}).single('file_name'); 
+
+// in future put this try catch to main logic module instead 1.txt should put file_name programatecly/
+// or create logic for deleting all files in directory
+try { 
+  fs.unlinkSync(__dirname + '/uploads/1.txt');
+} catch (err) {
+  console.error(err);
+}
 
 
 app.use(express.static(__dirname + '/css')); //serve css static
 
 app.get('/',function(req,res){
-  res.sendFile(__dirname + "/index.html"); // first page with file forms uploader
+  res.sendFile(__dirname + "/index.html"); // first page with file forms with only data here we save the name of a file
+  // file name in this form is a text not file, like in the next form in uploded rout
 });
 
+// Post request to send data to server
+  // Need to decide where to store  data from form
+      // My be create a temp file(how to do it)
+  // how to transfer data to main logic module 
+
+app.post('/uploaded/', function(req,res){
+  req.on("data", function(postBody){
+    var query = querystring.parse(postBody.toString());
+    data_object.message_quantity = query.message_quantity;
+    data_object.file_name = query.file_name;
+    data_object.number_of_first_сonract = query.number_of_first_сonract;
+    data_object.today_first_number = query.today_first_number;
+    // test data transferr to data_object from form
+    console.log(data_object.message_quantity,
+                data_object.file_name, 
+                data_object.number_of_first_сonract, 
+                data_object.today_first_number); 
+    res.end();
+    });
+});
+
+// Manual redirecting to upload route with xml to upload form
+
+app.get('/uploaded',function(req,res){
+  //res.send("<h1>Answer is" + data_object.message_quantity + "!</h1>"); test
+  res.sendFile(__dirname + "/uploaded.html");
+});
 
 //   1. Post request to uload xml file to server
   // 1.1 How to read file name from form and save it as a parameter for main logic module
   // Check for file existance:
     // If in uploads folder exist any file - delet it
       //else continue to uploadeing
-app.post('/uploaded',function(req,res){ 
+app.post('/uploaded/data',function(req,res){ 
     upload(req,res,function(err) {
         if(err) {
             return res.end("Error uploading file.");
@@ -36,24 +77,6 @@ app.post('/uploaded',function(req,res){
     });
 });
 
-// Manual redirecting to upload route with data form
-
-app.get('/uploaded',function(req,res){
-  res.sendFile(__dirname + "/uploaded.html");;
-});
-
-
-// Post request to send data to server
-  // Need to decide where to store  data from form
-      // My be create a temp file(how to do it)
-  // how to transfer data to main logic module 
-app.post('/uploaded/data', function(req,res){
-  req.on("data", function(postBody){
-    var query = querystring.parse(postBody.toString());
-    console.log(query.username);
-    res.end();
-    });
-});
 
 //Manual starting main logic moduale by manual redirecting to start rout
   // riquire main logit module for xml parsing 
@@ -85,11 +108,3 @@ app.listen(3000,function(){
   // improvein UX with solving manual redirection promblem, for ex: create buttons
 
 
-// My todo list 111
-// For example:  
-  // we can change the routs:
-    //fist serve the form with data and from this form take the file name as a parameter
-    // and send it uplod module
-    // than sereve form with only one field wit file and upload it  - good decision
-
-    // By implomenting this dexcision we solve 1.1 par
