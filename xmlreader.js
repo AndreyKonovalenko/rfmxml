@@ -4,30 +4,22 @@ var fs = require('fs'),
 
 var filename = 'FM01_1_7703047975770301001_20160316_0100000034.xml';
 
-var message_quantity = 5;
+var message_quantity = 1;
 var parser = new xml2js.Parser();
 
 function main_logic(filename, message_quantity){
   for (var i = 1; i <= message_quantity; i++) {
     var new_file_name = filename_builder(i, filename); // глобально передаю имя сгерерированного файла
     console.log(new_file_name);
-    //var predacha = {['Сбщ110Операции']['ИнформЧасть'][0]['Операция'][0]['ХарактерОп'][0]};
-   // fs.readFile(__dirname + '/uploads/' + filename, function(err, data) {  // Думаю из- за того что xml2js выполняется асихнронно
-      
-      var data = fs.readFileSync(__dirname + '/uploads/' + filename);
-      parser.parseString(data, function (err, result) {
-          console.log(util.inspect(result, {depth: null}));
-          console.log(typeof result);
-          my_tag(result, new_file_name);
-          console.log('Done');
+    var data = fs.readFileSync(__dirname + '/uploads/' + filename);
+    parser.parseString(data, function (err, result) {
+      console.log(util.inspect(result, {depth: null}));
+      console.log(typeof result);
+      my_tag(result, new_file_name);
+      console.log('Done');
       });
     };
-  //}
 }
-// работает воред
-
-
-
 
 function filename_parser(file){
   var firstpart = file.slice(0, -4); // slice .xml
@@ -40,8 +32,10 @@ function filename_parser(file){
 function filename_builder(i, filename){
   var my_arr = filename_parser(filename);
   var new_name = my_arr[2];
-  if (my_arr[1] < 100) {
+  if (my_arr[1] < 100 && my_arr[1] > 9) {
     new_name += '0' + (my_arr[1] + i).toString() + '.xml';
+  }else if (my_arr[1]<10){
+    new_name += '00' (my_arr[1] + i).toString() + '.xml';
   }else {
     new_name += (my_arr[1] + i).toString() + '.xml';
   }
@@ -50,14 +44,27 @@ function filename_builder(i, filename){
 
 
 
-function my_tag(input, new_file) {
+function my_tag(input, new_file) { // это функцая должна модифицирова ть xml file
   var result = {},
-      new_ob = {};
-  result = input['Сбщ110Операции']['ИнформЧасть'][0]['Операция'][0]['ХарактерОп'][0];
+      new_ob = input;
+  result = input['Сбщ110Операции']['ИнформЧасть'][0]['Операция'][0]['ХарактерОп'][0]; // equal zn
   result += " мои изменения";
   console.log(typeof result);
   console.log(result);
-  var new_ob = input;
+
+  var nuber_of_record = input['Сбщ110Операции']['ИнформЧасть'][0]['Операция'][0]['НомерЗаписи'][0];
+
+  var payment_basis_number = input['Сбщ110Операции']['ИнформЧасть'][0]['Операция'][0]['ОснованиеОп'][1]['НомДок'][0];
+  var payment_basis = input['Сбщ110Операции']['ИнформЧасть'][0]['Операция'][0]['ОснованиеОп'][0]['СодДок'][0];
+  var nature_of_the_operation = input['Сбщ110Операции']['ИнформЧасть'][0]['Операция'][0]['ХарактерОп'][0];
+  var purpose_of_payment = input['Сбщ110Операции']['ИнформЧасть'][0]['Операция'][0]['НазнПлатеж'][0];
+  
+  console.log(nuber_of_record);
+  console.log(payment_basis_number);
+  console.log(payment_basis);
+  console.log(nature_of_the_operation);
+  console.log(purpose_of_payment);
+
   // записали изиененнай таг
   new_ob['Сбщ110Операции']['ИнформЧасть'][0]['Операция'][0]['ХарактерОп'][0] = result;
   console.log(util.inspect(new_ob, {depth: null}));
