@@ -93,7 +93,7 @@ app.get('/start',function(req,res){
     //Find way dinamicle pass files names to  res.download
 app.get('/download',function(req,res){
   var filename = "";
-  var pathtofile = __dirname  + "/dowloads "+ filename;
+  var pathtofile = __dirname  + "/downloads "+ filename;
   res.download(pathtofile);
 });
 
