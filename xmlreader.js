@@ -12,15 +12,17 @@ function main_logic(filename, message_quantity){
     var new_file_name = filename_builder(i, filename); // глобально передаю имя сгерерированного файла
     console.log(new_file_name);
     //var predacha = {['Сбщ110Операции']['ИнформЧасть'][0]['Операция'][0]['ХарактерОп'][0]};
-    fs.readFile(__dirname + '/uploads/' + filename, function(err, data) {  // Думаю из- за того что xml2js выполняется асихнронно
+   // fs.readFile(__dirname + '/uploads/' + filename, function(err, data) {  // Думаю из- за того что xml2js выполняется асихнронно
+      
+      var data = fs.readFileSync(__dirname + '/uploads/' + filename);
       parser.parseString(data, function (err, result) {
           console.log(util.inspect(result, {depth: null}));
           console.log(typeof result);
           my_tag(result, new_file_name);
           console.log('Done');
       });
-    });
-  }
+    };
+  //}
 }
 // работает воред
 
