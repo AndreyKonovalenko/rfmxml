@@ -45,12 +45,12 @@ app.post('/uploaded/', function(req,res){
     var query = querystring.parse(postBody.toString());
     data_object.message_quantity = query.message_quantity;
     data_object.file_name = query.file_name;
-    data_object.number_of_first_сonract = query.number_of_first_сonract;
+    data_object.number_of_first_сontract = query.number_of_first_сontract;
     data_object.today_first_number = query.today_first_number;
     // test data transferr to data_object from form
     console.log(data_object.message_quantity,
                 data_object.file_name, 
-                data_object.number_of_first_сonract, 
+                data_object.number_of_first_сontract, 
                 data_object.today_first_number); 
     res.end();
     });
