@@ -1,3 +1,5 @@
+"use strict";
+
 var express = require("express");
 var multer  = require('multer');
 var querystring = require("querystring");
@@ -27,20 +29,15 @@ app.use(express.static(__dirname + '/css')); //serve css static
 app.get('/',function(req,res){
   res.sendFile(__dirname + "/index.html");
   try { 
-    let file_arr = fs.readdirSync(__dirname + '/downloads/');
-    for (let filename of file_arr) {
-    fs.unlinkSync(__dirname + '/downloads/' + filename);
+    file_deleter('/downloads/');
     }
-  } 
   catch (err) {
     console.error(err);
   }
+
   try { 
-    let file_arr2 = fs.readdirSync(__dirname + '/uploads/');
-    for (let filename of file_arr2) {
-    fs.unlinkSync(__dirname + '/uploads/' + filename);
-    }
-  } 
+    file_deleter('/uploads/');
+  }
   catch (err) {
     console.error(err);
   }
@@ -83,3 +80,11 @@ app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
 });
 
+
+function file_deleter(filepath){
+  var file_arr = fs.readdirSync(__dirname + filepath);
+  for (var i = 0; i < file_arr.length; i++) {
+  var filename = file_arr[i];
+  fs.unlinkSync(__dirname + filepath + filename);
+  }
+}
