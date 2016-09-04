@@ -1,7 +1,7 @@
 var fs = require('fs'),
     xml2js = require('xml2js'),
-    util = require('util');
-var zipFolder = require('zip-folder');
+    util = require('util'),
+    zipFolder = require('zip-folder');
 
 /*var filename = 'FM01_1_7703047975770301001_20160316_0100000034.xml';
 var number_of_first_сontract = '№2515/34ДЛ';

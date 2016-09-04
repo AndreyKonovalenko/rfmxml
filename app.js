@@ -25,17 +25,32 @@ var upload = multer({ storage : storage}).single('file_name');
 
 // in future put this try catch to main logic module instead 1.txt should put file_name programatecly/
 // or create logic for deleting all files in directory
-try { 
-  fs.unlinkSync(__dirname + '/uploads/1.txt');
-} catch (err) {
-  console.error(err);
-}
 
 
 app.use(express.static(__dirname + '/css')); //serve css static
 
 app.get('/',function(req,res){
-  res.sendFile(__dirname + "/index.html"); // first page with file forms with only data here we save the name of a file
+  res.sendFile(__dirname + "/index.html");
+  try { 
+    let file_arr = fs.readdirSync(__dirname + '/downloads/');
+    for (let filename of file_arr) {
+    fs.unlinkSync(__dirname + '/downloads/' + filename);
+    }
+  } 
+  catch (err) {
+    console.error(err);
+  }
+
+  try { 
+    let file_arr2 = fs.readdirSync(__dirname + '/uploads/');
+    for (let filename of file_arr2) {
+    fs.unlinkSync(__dirname + '/uploads/' + filename);
+    }
+  } 
+  catch (err) {
+    console.error(err);
+  }
+   // first page with file forms with only data here we save the name of a file
   // file name in this form is a text not file, like in the next form in uploded rout
 });
 
