@@ -19,6 +19,7 @@ var storage =  multer.diskStorage({
 });
 
 var data_object = {};
+
 var upload = multer({ storage : storage}).single('file_name');
 
 app.use(express.static(__dirname + '/css')); //serve css static
