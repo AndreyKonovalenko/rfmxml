@@ -12,7 +12,7 @@
     "express": "^4.14.0",
     "multer": "^1.2.0",
     "xml2js": "^0.4.17",
-    "zip-folder": "^1.0.0",
+    "zip-folder": "1.0.0",
     "engines": {
     "node": "6.1.0"
     }
