@@ -25,8 +25,7 @@ var data_object = {};
 var upload = multer({ storage : storage}).single('file_name');
 
 app.use(express.static(__dirname + '/css')); //serve css static
-app.use(express.static(__dirname + '/uploads'));
-app.use(express.static(__dirname + '/downloads'));
+
 app.get('/',function(req,res){
   res.sendFile(__dirname + "/index.html");
   try { 
