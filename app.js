@@ -2,8 +2,12 @@ var express =   require("express");
 var multer  =   require('multer');
 var querystring = require("querystring");
 var fs = require("fs");
+var main_logic = require("./xmlreader.js");
 var app  =   express();
 var util = require('util');
+
+var xml2js = require('xml2js');
+
 
 var storage =   multer.diskStorage({
   destination: function (req, file, callback) {
@@ -46,12 +50,12 @@ app.post('/uploaded/', function(req,res){
     data_object.message_quantity = query.message_quantity;
     data_object.file_name = query.file_name;
     data_object.number_of_first_сontract = query.number_of_first_сontract;
-    data_object.today_first_number = query.today_first_number;
+    data_object.last_number = query.last_number;
     // test data transferr to data_object from form
     console.log(data_object.message_quantity,
                 data_object.file_name, 
                 data_object.number_of_first_сontract, 
-                data_object.today_first_number); 
+                data_object.last_number); 
     res.end();
     });
 });
@@ -84,17 +88,23 @@ app.post('/uploaded/data',function(req,res){
     // taking data form data form
     // multipal file creation 
 app.get('/start',function(req,res){
-      console.log("stat the program!");
+  main_logic.main_logic(data_object.file_name, data_object.message_quantity, data_object.number_of_first_сontract, data_object.last_number);
+  res.end('Main logic did its work)))');
 });
+
+/*app.post('/start',function(req,res){
+  res.on("data", p
+
+    main_logic(data_object.file_name, data_object.message_quantity, data_object.number_of_first_сontract, data_object.last_number);
+  console.log("stat the program!");
+});*/
 
 //Manual dwonloading new files by manual redirection to download roud
   //Impoving downlode process:
     //Check dowloads dir for file quantity
     //Find way dinamicle pass files names to  res.download
 app.get('/download',function(req,res){
-  var filename = "";
-  var pathtofile = __dirname  + "/downloads "+ filename;
-  res.download(pathtofile);
+  res.download(__dirname  + "/downloads/archive.zip");  
 });
 
 
@@ -108,3 +118,11 @@ app.listen(3000,function(){
   // improvein UX with solving manual redirection promblem, for ex: create buttons
 
 
+/*let file_arr = fs.readdirSync(__dirname + '/downloads');
+  console.log(file_arr);
+  for (let filename of file_arr) {
+    var pathtofile = __dirname  + "/downloads "+ filename;
+    res.download(pathtofile);
+  }
+  res.end('All fiels downloaded!');  
+});*/

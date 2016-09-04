@@ -1,15 +1,17 @@
 var fs = require('fs'),
     xml2js = require('xml2js'),
     util = require('util');
+var zipFolder = require('zip-folder');
 
-var filename = 'FM01_1_7703047975770301001_20160316_0100000034.xml';
+/*var filename = 'FM01_1_7703047975770301001_20160316_0100000034.xml';
 var number_of_first_сontract = '№2515/34ДЛ';
 var last_number = 40;
 
-var message_quantity = 2;
-var parser = new xml2js.Parser();
+var message_quantity = 2;*/
+
 
 function main_logic(filename, message_quantity, number_of_first_сontract, last_number){
+  var parser = new xml2js.Parser();
   for (var i = 1; i <= message_quantity; i++) {
     var new_file_name = filename_builder(i, filename); // глобально передаю имя сгерерированного файла
     console.log(new_file_name);
@@ -22,6 +24,13 @@ function main_logic(filename, message_quantity, number_of_first_сontract, last_
       console.log('Done');
       });
     };
+  zipFolder('./downloads', './downloads/archive.zip', function(err) {
+    if(err) {
+        console.log('oh no!', err);
+    } else {
+        console.log('EXCELLENT');
+    }
+  });
 }
 
 function filename_parser(file){
@@ -103,7 +112,7 @@ function build_xml(input_obj, new_file) {
 }
 
 
-main_logic(filename, message_quantity, number_of_first_сontract, last_number);
+//main_logic(filename, message_quantity, number_of_first_сontract, last_number);
 
 
 // replace the arrey element
@@ -133,7 +142,7 @@ console.log(replace_contract_maker(5, "№2515/ДЛ"));
 */
 
 function last_messege_number_maker(n, last_number){
-  var new_last_number = (n + last_number).toString();
+  var new_last_number = (n + Number(last_number)).toString();
   return new_last_number;
 }
 
@@ -151,3 +160,4 @@ function number_of_record_element_replacer(element_for_replace, last_number, rep
 }
 
 //console.log(number_of_record_element_replacer(element_for_replace, last_number, replace_element)); function test
+module.exports.main_logic = main_logic;
