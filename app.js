@@ -27,6 +27,9 @@ var upload = multer({ storage : storage}).single('file_name');
 // or create logic for deleting all files in directory
 
 
+
+app.set('port', (process.env.PORT || 5000));
+
 app.use(express.static(__dirname + '/css')); //serve css static
 
 app.get('/',function(req,res){
@@ -123,10 +126,16 @@ app.get('/download',function(req,res){
 });
 
 
-app.listen(3000,function(){
-    console.log("Working on port 3000");
+
+app.listen(app.get('port'), function() {
+  console.log('Node app is running on port', app.get('port'));
 });
 
+
+/*app.listen(3000,function(){
+    console.log("Working on port 3000");
+});
+*/
 // Global problems:
   // Don't know how to redirect routs automaticly
   // Wuold be nice to solve the promlem with separate parsing forms with file and data 
