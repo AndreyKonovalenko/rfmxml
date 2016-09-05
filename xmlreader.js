@@ -17,7 +17,7 @@ function main_logic(filename, message_quantity, number_of_first_сontract, last_
       console.log('Done');
       });
     }
-  zipFolder('./downloads', './downloads/archive.zip', function(err) {
+  zipFolder(__dirname + '/downloads', __dirname + '/uploads/archive.zip', function(err) {
     if(err) {
         console.log('oh no!', err);
     } else {

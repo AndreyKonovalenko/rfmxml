@@ -73,7 +73,7 @@ app.get('/start',function(req,res){
 });
 
 app.get('/download',function(req,res){
-  res.download(__dirname  + "/downloads/archive.zip");  
+  res.download(__dirname  + "/uploads/archive.zip");  
 });
 
 app.listen(app.get('port'), function() {
